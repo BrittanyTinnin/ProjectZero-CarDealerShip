@@ -6,6 +6,7 @@ import java.util.List;
 
 public abstract class User implements Serializable{
 
+    private static final long serialVersionUID = 5169835193377790295L;
     private String firstName;
     private String lastName;
     private List<Car> lot = new ArrayList<>();
@@ -32,6 +33,10 @@ public abstract class User implements Serializable{
 
     public void setLastName(String lastName) {
         this.lastName = lastName;
+    }
+
+    public void setLot(List<Car> lot){
+        this.lot = lot;
     }
 
     public List<Car> getLot(){

@@ -6,6 +6,7 @@ import java.io.*;
 import java.util.*;
 
 public class Employee extends User implements Dao<Employee> {
+    private static final long serialVersionUID = 6180622194582426412L;
     public static Scanner scanner = new Scanner(System.in);
     private List<Employee> employees = new LinkedList<>();
 
@@ -38,8 +39,8 @@ public class Employee extends User implements Dao<Employee> {
             return null;
         }
 
-        Employee employee = employees.get(findByName(firstName, lastName));
-        return employee;
+
+        return employees.get(findByName(firstName, lastName));
     }
 
     /*
@@ -77,12 +78,13 @@ public class Employee extends User implements Dao<Employee> {
             try {
                 System.out.println("\nChoose from your menu:\n");
                 System.out.println(
-                        "1) Add a car\n" +
+                                "1) Add a car\n" +
                                 "2) Accept car offer\n" +
                                 "3) Reject car offer\n" +
                                 "4) Remove car\n" +
                                 "5) view all payments\n" +
-                                "6) Quit"
+                                "6) View Lot\n" +
+                                "7) Quit"
                 );
 
                 int choice = scanner.nextInt();
@@ -105,6 +107,9 @@ public class Employee extends User implements Dao<Employee> {
                         viewPayments();
                         break;
                     case 6:
+                        viewLot();
+                        break;
+                    case 7:
                         quit = true;
                         break;
                     default:
@@ -130,10 +135,34 @@ public class Employee extends User implements Dao<Employee> {
         Random rand = new Random();
         int vin = rand.nextInt(1500 + 1);
 
+        double price = (rand.nextDouble() * 1000) + 1000;
 
-        Car car = new Car(vin, make, model, color);
+
+        Car car = new Car(vin, make, model, color, price);
         getLot().add(car);
         System.out.println(getLot());
+
+
+        try {
+            ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("carlot.txt"));
+            oos.writeObject(getLot());
+            oos.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void viewLot(){
+        try {
+            ObjectInputStream ois = new ObjectInputStream(new FileInputStream("carlot.txt"));
+            setLot((List<Car>)ois.readObject());
+            ois.close();
+            for(Car car : getLot()){
+                System.out.println(car);
+            }
+        } catch(IOException | ClassNotFoundException e){
+            System.out.println("Customers file empty.\n");
+        }
     }
 
     public boolean acceptOffer() {

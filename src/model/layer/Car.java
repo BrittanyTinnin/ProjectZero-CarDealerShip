@@ -1,23 +1,26 @@
 package model.layer;
 
-import java.util.ArrayList;
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.List;
 
-public class Car {
+public class Car implements Serializable {
 
-    private int vin;
-    private String make;
-    private String model;
-    private String color;
-    private HashMap<User, Double> offers = new HashMap<>();
-    private List<Payment> payments = new ArrayList<Payment>();
+    private static final long serialVersionUID = 3991040284210077501L;
+    private final int vin;
+    private final String make;
+    private final String model;
+    private final String color;
+    private final double price;
+    private HashMap<User, Double> offers;
+    private List<Payment> payments;
 
-    public Car(int vin, String make, String model, String color){
+    public Car(int vin, String make, String model, String color, double price){
         this.vin = vin;
         this.make = make;
         this.model = model;
         this.color=color;
+        this.price = price;
         this.offers = null;
         this.payments = null;
     }
@@ -53,7 +56,7 @@ public class Car {
 
     @Override
     public String toString() {
-        return "model.layer.Car{" +
+        return "Car{" +
                 "vin=" + vin +
                 ", make='" + make + '\'' +
                 ", model='" + model + '\'' +

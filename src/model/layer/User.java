@@ -4,13 +4,13 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class User implements Serializable{
+public abstract class User<T> implements Serializable{
 
     private static final long serialVersionUID = 5169835193377790295L;
     private String firstName;
     private String lastName;
     private List<Car> lot = new ArrayList<>();
-    private List<Car> garage = new ArrayList<>();
+
 
     public User(){}
 
@@ -43,16 +43,13 @@ public abstract class User implements Serializable{
         return lot;
     }
 
-    public List<Car> getGarage(){
-        return garage;
-    }
 
 
 
 
     public abstract boolean register(String firstName, String lastName);
 
-    public abstract User login(String firstName, String lastName);
+    public abstract T login(String firstName, String lastName);
 
 
 }

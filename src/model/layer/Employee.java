@@ -5,7 +5,7 @@ import dao.layer.Dao;
 import java.io.*;
 import java.util.*;
 
-public class Employee extends User implements Dao<Employee> {
+public class Employee extends User<Employee> implements Dao<Employee> {
     private static final long serialVersionUID = 6180622194582426412L;
     public static Scanner scanner = new Scanner(System.in);
     private List<Employee> employees = new LinkedList<>();
@@ -25,7 +25,7 @@ public class Employee extends User implements Dao<Employee> {
         if (findByName(firstName, lastName) < 0) {
             Employee emp = new Employee(firstName, lastName);
             employees.add(emp);
-            storeData(employees);
+            storeUserData(employees);
             return true;
         }
         return false;
@@ -33,7 +33,7 @@ public class Employee extends User implements Dao<Employee> {
 
 
     @Override
-    public User login(String firstName, String lastName) {
+    public Employee login(String firstName, String lastName) {
         if (employees.isEmpty() || findByName(firstName, lastName) < 0) {
             System.out.println("User does not exist.");
             return null;
@@ -202,7 +202,7 @@ public class Employee extends User implements Dao<Employee> {
 
 
     @Override
-    public List<Employee> getData() {
+    public void getUserData() {
         try {
             ObjectInputStream ois = new ObjectInputStream(new FileInputStream("employees.txt"));
             employees = (List<Employee>) ois.readObject();
@@ -215,7 +215,6 @@ public class Employee extends User implements Dao<Employee> {
         } catch (IOException | ClassNotFoundException e) {
             System.out.println("Employees file empty.\n");
         }
-        return null;
     }
 
 
@@ -224,7 +223,7 @@ public class Employee extends User implements Dao<Employee> {
 
 
     @Override
-    public boolean storeData(List<Employee> users) {
+    public boolean storeUserData(List<Employee> users) {
 
         try {
             ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("employees.txt"));

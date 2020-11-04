@@ -33,10 +33,14 @@ public class Computer {
 
 
     /***********************************
-     ***********DECORATION**************
+     **************MENU*****************
      ***********************************/
 
     private static void menu() {
+
+        employee.getUserData();
+        customer.getUserData();
+        customer.populateLot();
 
 
         boolean quit = false;
@@ -89,7 +93,7 @@ public class Computer {
     private static void employeeAccess() {
         try {
 
-            employee.getData();
+
 
             System.out.println("Are you a new employee?\n" +
                     "1) Yes\n" +
@@ -163,7 +167,7 @@ public class Computer {
 
         try {
 
-            customer.getData();
+
 
 
             System.out.println("Are you a new customer?\n" +
@@ -224,7 +228,7 @@ public class Computer {
         String lastName = scanner.next();
         if (customer.login(firstName, lastName) != null) {
             System.out.println("Customer logged in.\n");
-            customer.customerMenu();
+            customer.customerMenu(customer.login(firstName, lastName));
         }
 
     }

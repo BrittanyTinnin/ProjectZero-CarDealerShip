@@ -4,21 +4,20 @@ import dao.layer.Dao;
 import sun.awt.image.ImageWatched;
 
 import java.io.*;
-import java.util.InputMismatchException;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 
-public class Customer extends User implements Dao<Customer> {
+public class Customer extends User<Customer> implements Dao<Customer> {
 
     public static Scanner scanner = new Scanner(System.in);
     static List<Customer> customers = new LinkedList<Customer>();
+    private List<Car> garage = new ArrayList<>();
 
     public Customer() {
     }
 
     public Customer(String firstName, String lastName) {
         super(firstName, lastName);
+        this.garage = null;
     }
 
 
@@ -28,7 +27,6 @@ public class Customer extends User implements Dao<Customer> {
         if (findByName(firstName, lastName) < 0) {
             Customer customer = new Customer(firstName, lastName);
             customers.add(customer);
-            storeData(customers);
             return true;
         }
         return false;
@@ -36,15 +34,14 @@ public class Customer extends User implements Dao<Customer> {
 
 
     @Override
-    public User login(String firstName, String lastName) {
+    public Customer login(String firstName, String lastName) {
 
         if (customers.isEmpty() || findByName(firstName, lastName) < 0) {
             System.out.println("model.layer.User does not exist.");
             return null;
         }
 
-        Customer customer = customers.get(findByName(firstName, lastName));
-        return customer;
+        return customers.get(findByName(firstName, lastName));
     }
 
     /*
@@ -70,7 +67,11 @@ public class Customer extends User implements Dao<Customer> {
     }
 
 
-    public void customerMenu() {
+
+
+
+
+    public void customerMenu(User cust) {
         boolean quit = false;
 
         while (!quit) {
@@ -78,7 +79,7 @@ public class Customer extends User implements Dao<Customer> {
             try {
 
 
-                System.out.println("Choose from your menu:\n");
+                System.out.println("\nChoose from your menu:\n");
                 System.out.println(
                         "1) View my cars\n" +
                                 "2) Cars on the lot\n" +
@@ -91,7 +92,7 @@ public class Customer extends User implements Dao<Customer> {
                 switch (choice) {
                     case 1:
                         //view my cars
-                        garage();
+//                        garage();
                         break;
                     case 2:
                         //view cars on lot
@@ -103,7 +104,7 @@ public class Customer extends User implements Dao<Customer> {
                         break;
                     case 4:
                         //view my remaining payments
-                        carPayments();
+//                        carPayments();
                         break;
                     case 5:
                         quit = true;
@@ -122,30 +123,65 @@ public class Customer extends User implements Dao<Customer> {
     }
 
 
-    private void viewLot() {
 
+
+
+
+    private void viewLot() {
+        for(Car car : getLot()){
+            System.out.println(car);
+        }
     }
 
+
+
+
+
+
     private boolean makeOffer() {
+
+//        System.out.println("Vin # of car to make offer:");
+//        int vin = scanner.nextInt();
+//        System.out.println("Offer Amount:");
+//        double amount = scanner.nextDouble();
+        for(int i=0; i<getLot().size(); i++){
+//            System.out.println("VIN: " + getLot().get(i).getVin());
+//            if(getLot().get(i).getVin()==vin){
+//                return getLot().get(i).addOffer(amount);
+//            } else {
+//                System.out.println("Offer cannot be made.");
+//
+//            }
+            System.out.println(getLot().get(i).getVin());
+        }
         return false;
     }
 
-    private void garage() {
-        System.out.println("Inside customer garage");
-        System.out.println(getGarage());
+
+
+
+    public void populateLot(){
+        try {
+            ObjectInputStream ois = new ObjectInputStream(new FileInputStream("carlot.txt"));
+            setLot((List<Car>)ois.readObject());
+            ois.close();
+        } catch(IOException | ClassNotFoundException e){
+            System.out.println("Car lot file empty.\n");
+        }
     }
 
-    private void carPayments() {
+    public void updateLot(){
 
     }
 
 
     @Override
-    public List<Customer> getData() {
+    public void getUserData() {
 
         try {
             ObjectInputStream ois = new ObjectInputStream(new FileInputStream("customers.txt"));
             customers = (List<Customer>)ois.readObject();
+
             ois.close();
             System.out.println("Customer file read successfully.\n");
             for(Customer c:customers){
@@ -154,12 +190,11 @@ public class Customer extends User implements Dao<Customer> {
         }catch(IOException | ClassNotFoundException e){
             System.out.println("Customers file empty.\n");
         }
-        return null;
 
     }
 
     @Override
-    public boolean storeData(List<Customer> users) {
+    public boolean storeUserData(List<Customer> users) {
         try {
             ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("customers.txt"));
             oos.writeObject(users);

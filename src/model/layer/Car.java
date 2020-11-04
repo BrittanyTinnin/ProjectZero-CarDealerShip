@@ -32,7 +32,7 @@ public class Car implements Serializable {
      */
 
 
-    public boolean addOffer(int amount){
+    public boolean addOffer(double amount){
         return false;
     }
 

@@ -40,7 +40,7 @@ public class Computer {
 
         employee.getUserData();
         customer.getUserData();
-        customer.populateLot();
+        customer.retrieveCarData();
 
 
         boolean quit = false;
@@ -48,6 +48,7 @@ public class Computer {
 
 
         while (!quit) {
+            listAll();
             try {
                 System.out.println("\nChoose an option: ");
                 System.out.println(
@@ -61,14 +62,15 @@ public class Computer {
                 switch (x) {
                     case 1:
                         customerAccess();
+
                         break;
                     case 2:
                         employeeAccess();
+
                         break;
                     case 3:
                         System.out.println("Exiting program now...");
                         quit = true;
-                        scanner.close();
                         break;
                     default:
                         System.out.println("Invalid entry, try again.");
@@ -91,10 +93,8 @@ public class Computer {
 
 
     private static void employeeAccess() {
+
         try {
-
-
-
             System.out.println("Are you a new employee?\n" +
                     "1) Yes\n" +
                     "2) No\n" +
@@ -166,10 +166,6 @@ public class Computer {
     private static void customerAccess() {
 
         try {
-
-
-
-
             System.out.println("Are you a new customer?\n" +
                     "1) Yes\n" +
                     "2) No\n" +
@@ -234,13 +230,26 @@ public class Computer {
     }
 
 
+    public static void listAll(){
+        for(Employee emp: employee.employees){
+            System.out.println(emp);
+        }
+
+        for(Customer cust: customer.customers){
+            System.out.println(cust);
+        }
+    }
+
+
+
     /***********************************
-     ***********DECORATION**************
+     ***********MAINMENU**************
      ***********************************/
 
     public static void main(String[] args) {
 
         menu();
+        scanner.close();
 
     }
 }

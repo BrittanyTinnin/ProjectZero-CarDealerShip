@@ -8,7 +8,7 @@ import java.util.*;
 public class Employee extends User<Employee> implements Dao<Employee> {
     private static final long serialVersionUID = 6180622194582426412L;
     public static Scanner scanner = new Scanner(System.in);
-    private List<Employee> employees = new LinkedList<>();
+    public List<Employee> employees = new LinkedList<>();
 
     public Employee() {
     }
@@ -75,6 +75,7 @@ public class Employee extends User<Employee> implements Dao<Employee> {
         boolean quit = false;
 
         while (!quit) {
+            retrieveCarData();
             try {
                 System.out.println("\nChoose from your menu:\n");
                 System.out.println(
@@ -117,6 +118,7 @@ public class Employee extends User<Employee> implements Dao<Employee> {
                         break;
 
                 }
+                storeCarData();
             } catch (InputMismatchException e) {
                 System.out.println("Invalid entry, try again.\n");
                 scanner.nextLine();
@@ -138,18 +140,11 @@ public class Employee extends User<Employee> implements Dao<Employee> {
         double price = (rand.nextDouble() * 1000) + 1000;
 
 
-        Car car = new Car(vin, make, model, color, price);
+        Car car = new Car(vin, make, model, color);
         getLot().add(car);
         System.out.println(getLot());
 
 
-        try {
-            ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("carlot.txt"));
-            oos.writeObject(getLot());
-            oos.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 
     private void viewLot(){
@@ -164,6 +159,12 @@ public class Employee extends User<Employee> implements Dao<Employee> {
             System.out.println("Customers file empty.\n");
         }
     }
+
+
+
+
+
+
 
     public boolean acceptOffer() {
         return false;
@@ -199,6 +200,31 @@ public class Employee extends User<Employee> implements Dao<Employee> {
     public void viewPayments() {
 
     }
+
+
+
+    public void retrieveCarData(){
+        try {
+            ObjectInputStream ois = new ObjectInputStream(new FileInputStream("carlot.txt"));
+            setLot((List<Car>)ois.readObject());
+            ois.close();
+        } catch(IOException | ClassNotFoundException e){
+            System.out.println("Car lot file empty.\n");
+        }
+    }
+
+
+    public void storeCarData(){
+        try {
+            ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("carlot.txt"));
+            oos.writeObject(getLot());
+            oos.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+
 
 
     @Override

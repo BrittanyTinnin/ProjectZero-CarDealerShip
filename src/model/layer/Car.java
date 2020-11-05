@@ -11,16 +11,15 @@ public class Car implements Serializable {
     private final String make;
     private final String model;
     private final String color;
-    private final double price;
+    private User owner;
     private HashMap<User, Double> offers;
     private List<Payment> payments;
 
-    public Car(int vin, String make, String model, String color, double price){
+    public Car(int vin, String make, String model, String color){
         this.vin = vin;
         this.make = make;
         this.model = model;
         this.color=color;
-        this.price = price;
         this.offers = null;
         this.payments = null;
     }
@@ -32,9 +31,7 @@ public class Car implements Serializable {
      */
 
 
-    public boolean addOffer(double amount){
-        return false;
-    }
+
 
 
 
@@ -52,7 +49,14 @@ public class Car implements Serializable {
 
 
 
+    public User getOwner(){
+        return owner;
+    }
 
+
+    public HashMap<User, Double> getOffers() {
+        return offers;
+    }
 
     @Override
     public String toString() {

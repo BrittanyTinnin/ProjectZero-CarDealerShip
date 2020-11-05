@@ -27,6 +27,7 @@ public class Customer extends User<Customer> implements Dao<Customer> {
         if (findByName(firstName, lastName) < 0) {
             Customer customer = new Customer(firstName, lastName);
             customers.add(customer);
+            storeUserData(customers);
             return true;
         }
         return false;
@@ -67,15 +68,11 @@ public class Customer extends User<Customer> implements Dao<Customer> {
     }
 
 
-
-
-
-
-    public void customerMenu(User cust) {
+    public void customerMenu(Customer cust) {
         boolean quit = false;
 
         while (!quit) {
-
+            retrieveCarData();
             try {
 
 
@@ -92,7 +89,7 @@ public class Customer extends User<Customer> implements Dao<Customer> {
                 switch (choice) {
                     case 1:
                         //view my cars
-//                        garage();
+                        garage(cust.getFirstName(), cust.getLastName());
                         break;
                     case 2:
                         //view cars on lot
@@ -100,7 +97,11 @@ public class Customer extends User<Customer> implements Dao<Customer> {
                         break;
                     case 3:
                         //make an offer
-                        makeOffer();
+                        if (makeOffer(cust)) {
+                            System.out.println("Offer added.");
+                        } else {
+                            System.out.println("Offer not added.");
+                        }
                         break;
                     case 4:
                         //view my remaining payments
@@ -114,6 +115,7 @@ public class Customer extends User<Customer> implements Dao<Customer> {
                         break;
 
                 }
+                storeCarData();
             } catch (InputMismatchException e) {
                 System.out.println("Invalid entry, try again.");
                 scanner.nextLine();
@@ -123,55 +125,92 @@ public class Customer extends User<Customer> implements Dao<Customer> {
     }
 
 
-
-
-
-
     private void viewLot() {
-        for(Car car : getLot()){
+        for (Car car : getLot()) {
             System.out.println(car);
         }
     }
 
 
+    public void garage(String firstName, String lastName) {
+        Customer customer = customers.get(findByName(firstName, lastName));
 
 
+        for (int i = 0; i < garage.size(); i++) {
+
+            if (garage.get(i).getOwner().equals(customer)) {
+                System.out.println(garage.get(i));
+            }
+
+        }
+    }
 
 
-    private boolean makeOffer() {
+    private boolean makeOffer(Customer customer) {
 
-//        System.out.println("Vin # of car to make offer:");
-//        int vin = scanner.nextInt();
-//        System.out.println("Offer Amount:");
-//        double amount = scanner.nextDouble();
-        for(int i=0; i<getLot().size(); i++){
-//            System.out.println("VIN: " + getLot().get(i).getVin());
-//            if(getLot().get(i).getVin()==vin){
-//                return getLot().get(i).addOffer(amount);
-//            } else {
-//                System.out.println("Offer cannot be made.");
-//
-//            }
-            System.out.println(getLot().get(i).getVin());
+        System.out.println("Vin # of car to make offer:");
+        int vin = scanner.nextInt();
+        System.out.println("Offer Amount:");
+        double amount = scanner.nextDouble();
+        for (int i = 0; i < getLot().size(); i++) {
+            if (getLot().get(i).getVin() == vin) {
+                System.out.println(getLot().get(i).getVin());
+                getLot().get(i).getOffers().put(customer, amount);
+                return true;
+
+//                getLot().get(i).addOffer(amount, getLot().get(i).getVin(), customer);
+//                return true;
+            }
         }
         return false;
     }
 
 
 
+//    public boolean addOffer(double amount, int carId, Customer customer){
+//        System.out.println("amount: " + amount);
+//        System.out.println("carId: " + carId);
+//        System.out.println("customer: " + customer);
+//
+//        List<Car> carlist = customer.getLot();
+//
+//        System.out.println("outside for loop");
+//        for(int i=0; i<carlist.size(); i++) {
+//            System.out.println("inside for loop");
+//            System.out.println("iteration vin: " + carlist.get(i).getVin());
+//            if(carlist.get(i).getVin() == carId){
+//                //System.out.println("iteration vin: " + carlist.get(i).getVin());
+//                carlist.get(i).offers.put(customer, amount);
+//                return true;
+//            }
+//        }
+//
+//
+//        return false;
+//    }
 
-    public void populateLot(){
+
+
+
+
+    public void retrieveCarData() {
         try {
             ObjectInputStream ois = new ObjectInputStream(new FileInputStream("carlot.txt"));
-            setLot((List<Car>)ois.readObject());
+            setLot((List<Car>) ois.readObject());
             ois.close();
-        } catch(IOException | ClassNotFoundException e){
+        } catch (IOException | ClassNotFoundException e) {
             System.out.println("Car lot file empty.\n");
         }
     }
 
-    public void updateLot(){
-
+    public void storeCarData() {
+        try {
+            ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("carlot.txt"));
+            oos.writeObject(getLot());
+            oos.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
 
@@ -180,15 +219,18 @@ public class Customer extends User<Customer> implements Dao<Customer> {
 
         try {
             ObjectInputStream ois = new ObjectInputStream(new FileInputStream("customers.txt"));
-            customers = (List<Customer>)ois.readObject();
-
+            customers = (List<Customer>) ois.readObject();
             ois.close();
             System.out.println("Customer file read successfully.\n");
-            for(Customer c:customers){
+            for (Customer c : customers) {
                 System.out.println(c);
             }
-        }catch(IOException | ClassNotFoundException e){
+        } catch (IOException | ClassNotFoundException e) {
             System.out.println("Customers file empty.\n");
+        }
+
+        for (Customer cust : customers) {
+            System.out.println(cust);
         }
 
     }
@@ -226,7 +268,7 @@ public class Customer extends User<Customer> implements Dao<Customer> {
     }
 
     @Override
-    public String toString(){
+    public String toString() {
         return "Customer{" +
                 "firstName='" + getFirstName() + '\'' +
                 ", lastName='" + getLastName() + '\'' +

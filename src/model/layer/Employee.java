@@ -83,7 +83,7 @@ public class Employee extends User<Employee> implements Dao<Employee> {
                                 "2) Accept car offer\n" +
                                 "3) Reject car offer\n" +
                                 "4) Remove car\n" +
-                                "5) view all payments\n" +
+                                "5) View car payments\n" +
                                 "6) View Lot\n" +
                                 "7) Quit"
                 );
@@ -186,7 +186,7 @@ public class Employee extends User<Employee> implements Dao<Employee> {
 
             if (car.getVin() > 0) {
                 getLot().remove(car);
-                System.out.println("model.layer.Car with vin " + car.getVin() + " was removed.");
+                System.out.println("Car with vin " + car.getVin() + " was removed.");
                 return true;
             }
 

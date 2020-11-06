@@ -1,6 +1,8 @@
 package model.layer;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -11,17 +13,15 @@ public class Car implements Serializable {
     private final String make;
     private final String model;
     private final String color;
-    private User owner;
-    private HashMap<User, Double> offers;
-    private List<Payment> payments;
+    private Customer owner;
+    private HashMap<Customer, BigDecimal> offers = new HashMap<>();
+    private List<Payment> payments = new ArrayList<>();
 
     public Car(int vin, String make, String model, String color){
         this.vin = vin;
         this.make = make;
         this.model = model;
         this.color=color;
-        this.offers = null;
-        this.payments = null;
     }
 
     /*
@@ -54,8 +54,23 @@ public class Car implements Serializable {
     }
 
 
-    public HashMap<User, Double> getOffers() {
+    public HashMap<Customer, BigDecimal> getOffers() {
         return offers;
+    }
+
+    public void addOffer(BigDecimal amount, Customer customer, Car car){
+        System.out.println(offers);
+        for(Customer c: offers.keySet()){
+            if(c.getLastName().equals(customer.getLastName())){
+                System.out.println("customer making replacement offer: " + c);
+                offers.replace(c, amount);
+                System.out.println("Offer has been replaced.");
+                return;
+            }
+        }
+
+        car.offers.put(customer, amount);
+
     }
 
     @Override

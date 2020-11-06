@@ -1,15 +1,16 @@
 package model.layer;
 
 import dao.layer.Dao;
-import sun.awt.image.ImageWatched;
 
 import java.io.*;
+import java.math.BigDecimal;
 import java.util.*;
 
 public class Customer extends User<Customer> implements Dao<Customer> {
 
+    private static final long serialVersionUID = 157820544088137620L;
     public static Scanner scanner = new Scanner(System.in);
-    static List<Customer> customers = new LinkedList<Customer>();
+    static List<Customer> customers = new LinkedList<>();
     private List<Car> garage = new ArrayList<>();
 
     public Customer() {
@@ -78,7 +79,7 @@ public class Customer extends User<Customer> implements Dao<Customer> {
 
                 System.out.println("\nChoose from your menu:\n");
                 System.out.println(
-                        "1) View my cars\n" +
+                                "1) View my cars\n" +
                                 "2) Cars on the lot\n" +
                                 "3) Make an offer\n" +
                                 "4) View car payments\n" +
@@ -87,6 +88,7 @@ public class Customer extends User<Customer> implements Dao<Customer> {
                 int choice = scanner.nextInt();
 
                 switch (choice) {
+
                     case 1:
                         //view my cars
                         garage(cust.getFirstName(), cust.getLastName());
@@ -136,10 +138,10 @@ public class Customer extends User<Customer> implements Dao<Customer> {
         Customer customer = customers.get(findByName(firstName, lastName));
 
 
-        for (int i = 0; i < garage.size(); i++) {
+        for (Car car : garage) {
 
-            if (garage.get(i).getOwner().equals(customer)) {
-                System.out.println(garage.get(i));
+            if (car.getOwner().equals(customer)) {
+                System.out.println(car);
             }
 
         }
@@ -148,23 +150,26 @@ public class Customer extends User<Customer> implements Dao<Customer> {
 
     private boolean makeOffer(Customer customer) {
 
+
         System.out.println("Vin # of car to make offer:");
         int vin = scanner.nextInt();
         System.out.println("Offer Amount:");
-        double amount = scanner.nextDouble();
+        BigDecimal amount = scanner.nextBigDecimal();
+
+        Offer offer = new Offer(amount, customer);
+
+
         for (int i = 0; i < getLot().size(); i++) {
             if (getLot().get(i).getVin() == vin) {
-                System.out.println(getLot().get(i).getVin());
-                getLot().get(i).getOffers().put(customer, amount);
+                getLot().get(i).addOffer(amount, customer, getLot().get(i));
+                storeCarData();
                 return true;
-
-//                getLot().get(i).addOffer(amount, getLot().get(i).getVin(), customer);
-//                return true;
             }
+
         }
+
         return false;
     }
-
 
 
 //    public boolean addOffer(double amount, int carId, Customer customer){
@@ -188,9 +193,6 @@ public class Customer extends User<Customer> implements Dao<Customer> {
 //
 //        return false;
 //    }
-
-
-
 
 
     public void retrieveCarData() {
@@ -229,10 +231,6 @@ public class Customer extends User<Customer> implements Dao<Customer> {
             System.out.println("Customers file empty.\n");
         }
 
-        for (Customer cust : customers) {
-            System.out.println(cust);
-        }
-
     }
 
     @Override
@@ -264,6 +262,7 @@ public class Customer extends User<Customer> implements Dao<Customer> {
 
     @Override
     public void deleteUser(Customer user) {
+
 
     }
 

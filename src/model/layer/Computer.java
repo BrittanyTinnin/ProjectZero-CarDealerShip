@@ -48,7 +48,6 @@ public class Computer {
 
 
         while (!quit) {
-            listAll();
             try {
                 System.out.println("\nChoose an option: ");
                 System.out.println(

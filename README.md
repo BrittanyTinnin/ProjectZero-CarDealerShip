@@ -1,4 +1,4 @@
-# model.layer.Car Dealership
+# Car Dealership
 
 ## Description
 
@@ -16,7 +16,7 @@
 5. 100% test coverage using JUnit Java testing framework.
 
 
-## model.layer.User Stories
+## User Stories
 
 - [x] As a user, I can login.
 - [x] As a user, I can register for a customer account.

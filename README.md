@@ -22,7 +22,7 @@
 - [x] As a user, I can register for a customer account.
 -----
 - [x] As an employee, I can add a car to the lot.
-- [ ] As an employee, I can accept or reject an offer for a car.
+- [x] As an employee, I can accept or reject an offer for a car.
 - [x] As an employee, I can remove a car from the lot.
 - [x] As an employee, I can view all payments.
 ----

@@ -31,5 +31,5 @@
 * As a customer, I can view the cars that I own.
 * As a customer, I can view my remaining payments for a car.
 ----
-* As the system, I can calculate the monthly payment.
-* As the system, I reject all other pending offers for a car when an offer is accepted.
+[ ] As the system, I can calculate the monthly payment.
+[ ] As the system, I reject all other pending offers for a car when an offer is accepted.

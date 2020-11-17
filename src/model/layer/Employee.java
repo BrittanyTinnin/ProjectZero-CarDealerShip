@@ -197,8 +197,9 @@ public class Employee extends User<Employee> implements Dao<Employee> {
         BigDecimal offerAmt = scanner.nextBigDecimal();
         BigDecimal months = new BigDecimal(12);
 
-        BigDecimal monthlyPayment = offerAmt.divide(months);
+        BigDecimal monthlyPayment = offerAmt.divide(months, BigDecimal.ROUND_CEILING);
         car.addToPayments(car, monthlyPayment);
+        car.voidOffers(car);
         System.out.println("Payments added to car");
     }
 

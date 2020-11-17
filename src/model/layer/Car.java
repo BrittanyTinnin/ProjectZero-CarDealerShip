@@ -31,9 +31,11 @@ public class Car implements Serializable {
      */
 
 
+    public void voidOffers(Car car){
 
+        car.offers = null;
 
-
+    }
 
 
     public void allPayments(){
@@ -45,9 +47,10 @@ public class Car implements Serializable {
         System.out.println("Inside car model");
         System.out.println("car: " + car);
         System.out.println("car payments: " + car.payments);
+        System.out.println("car payments size: " + car.payments.size());
 
-        for(int i=0; i<car.payments.size(); i++){
-            car.payments.add(amount);
+        for(int i=0; i<12; i++){
+            car.payments.add(i, amount);
         }
 
     }

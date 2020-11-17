@@ -3,6 +3,7 @@ package model.layer;
 import dao.layer.Dao;
 
 import java.io.*;
+import java.math.BigDecimal;
 import java.util.*;
 
 public class Employee extends User<Employee> implements Dao<Employee> {
@@ -79,7 +80,7 @@ public class Employee extends User<Employee> implements Dao<Employee> {
             try {
                 System.out.println("\nChoose from your menu:\n");
                 System.out.println(
-                                "1) Add a car\n" +
+                        "1) Add a car\n" +
                                 "2) Accept car offer\n" +
                                 "3) Reject car offer\n" +
                                 "4) Remove car\n" +
@@ -147,28 +148,60 @@ public class Employee extends User<Employee> implements Dao<Employee> {
 
     }
 
-    private void viewLot(){
+    private void viewLot() {
         try {
             ObjectInputStream ois = new ObjectInputStream(new FileInputStream("carlot.txt"));
-            setLot((List<Car>)ois.readObject());
+            setLot((List<Car>) ois.readObject());
             ois.close();
-            for(Car car : getLot()){
+            for (Car car : getLot()) {
                 System.out.println(car);
             }
-        } catch(IOException | ClassNotFoundException e){
+        } catch (IOException | ClassNotFoundException e) {
             System.out.println("Customers file empty.\n");
         }
     }
 
 
-
-
-
-
-
     public boolean acceptOffer() {
+        /*
+        employee accepts offer.
+        employee choose offer to accept via hashmap key.
+        once offer is chosen, set up payment arrangements, and make offers null.
+        Remove other offers.
+         */
+        System.out.println("What is the VIN of car, to accept offer?");
+        int vin = scanner.nextInt();
+        for (int i = 0; i < getLot().size(); i++) {
+            Car car = getLot().get(i);
+
+            if (car.getVin() == vin) {
+                // add 12 payments of offer amount/12 into payment ArrayList
+                pickedOffer(car);
+                return true;
+
+            }
+
+        }
+
+
         return false;
     }
+
+
+    private void pickedOffer(Car car) {
+        System.out.println("Which offer would you like to choose:");
+        car.getOffers().forEach((k, v) -> System.out.println(k + ": " + v));
+        //choose offer by typing dollar amount
+        //take that dollar amount and divide by 12 months
+        //add each payment into the payment ArrayList
+        BigDecimal offerAmt = scanner.nextBigDecimal();
+        BigDecimal months = new BigDecimal(12);
+
+        BigDecimal monthlyPayment = offerAmt.divide(months);
+        car.addToPayments(car, monthlyPayment);
+        System.out.println("Payments added to car");
+    }
+
 
     public boolean rejectOffer() {
         return false;
@@ -202,19 +235,18 @@ public class Employee extends User<Employee> implements Dao<Employee> {
     }
 
 
-
-    public void retrieveCarData(){
+    public void retrieveCarData() {
         try {
             ObjectInputStream ois = new ObjectInputStream(new FileInputStream("carlot.txt"));
-            setLot((List<Car>)ois.readObject());
+            setLot((List<Car>) ois.readObject());
             ois.close();
-        } catch(IOException | ClassNotFoundException e){
+        } catch (IOException | ClassNotFoundException e) {
             System.out.println("Car lot file empty.\n");
         }
     }
 
 
-    public void storeCarData(){
+    public void storeCarData() {
         try {
             ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("carlot.txt"));
             oos.writeObject(getLot());
@@ -225,8 +257,6 @@ public class Employee extends User<Employee> implements Dao<Employee> {
     }
 
 
-
-
     @Override
     public void getUserData() {
         try {
@@ -234,7 +264,7 @@ public class Employee extends User<Employee> implements Dao<Employee> {
             employees = (List<Employee>) ois.readObject();
             ois.close();
             System.out.println("Employee file read successfully.\n");
-            for(Employee e:employees){
+            for (Employee e : employees) {
                 System.out.println(e);
             }
 
@@ -242,10 +272,6 @@ public class Employee extends User<Employee> implements Dao<Employee> {
             System.out.println("Employees file empty.\n");
         }
     }
-
-
-
-
 
 
     @Override
@@ -257,7 +283,7 @@ public class Employee extends User<Employee> implements Dao<Employee> {
             oos.close();
             System.out.println("Employee file updated.\n");
             return true;
-        }catch (IOException e){
+        } catch (IOException e) {
             e.printStackTrace();
         }
         return false;
@@ -282,7 +308,7 @@ public class Employee extends User<Employee> implements Dao<Employee> {
     }
 
     @Override
-    public String toString(){
+    public String toString() {
         return "Employee{" +
                 "firstName='" + getFirstName() + '\'' +
                 ", lastName='" + getLastName() + '\'' +

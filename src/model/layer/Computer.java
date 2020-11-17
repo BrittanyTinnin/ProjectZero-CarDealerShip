@@ -1,8 +1,5 @@
 package model.layer;
 
-import model.layer.Customer;
-import model.layer.Employee;
-
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
@@ -246,6 +243,9 @@ public class Computer {
      ***********************************/
 
     public static void main(String[] args) {
+
+
+
 
         menu();
         scanner.close();

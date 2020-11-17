@@ -15,7 +15,7 @@ public class Car implements Serializable {
     private final String color;
     private Customer owner;
     private HashMap<Customer, BigDecimal> offers = new HashMap<>();
-    private List<Payment> payments = new ArrayList<>();
+    private List<BigDecimal> payments = new ArrayList<>(12);
 
     public Car(int vin, String make, String model, String color){
         this.vin = vin;
@@ -37,6 +37,18 @@ public class Car implements Serializable {
 
 
     public void allPayments(){
+
+    }
+
+
+    public void addToPayments(Car car, BigDecimal amount){
+        System.out.println("Inside car model");
+        System.out.println("car: " + car);
+        System.out.println("car payments: " + car.payments);
+
+        for(int i=0; i<car.payments.size(); i++){
+            car.payments.add(amount);
+        }
 
     }
 

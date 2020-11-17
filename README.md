@@ -18,18 +18,22 @@
 
 ## model.layer.User Stories
 
-- [ ] As a user, I can login.
-- [ ] As a user, I can register for a customer account.
+- [x] As a user, I can login.
+- [x] As a user, I can register for a customer account.
 -----
-- [ ] As an employee, I can add a car to the lot.
+- [x] As an employee, I can add a car to the lot.
 - [ ] As an employee, I can accept or reject an offer for a car.
-- [ ] As an employee, I can remove a car from the lot.
-- [ ] As an employee, I can view all payments.
+- [x] As an employee, I can remove a car from the lot.
+- [x] As an employee, I can view all payments.
 ----
-- [ ] As a customer, I can view the cars on the lot.
-- [ ] As a customer, I can make an offer for a car. 
+- [x] As a customer, I can view the cars on the lot.
+- [x] As a customer, I can make an offer for a car. 
 - [ ] As a customer, I can view the cars that I own.
 - [ ] As a customer, I can view my remaining payments for a car.
 ----
-- [ ] As the system, I can calculate the monthly payment.
-- [ ] As the system, I reject all other pending offers for a car when an offer is accepted.
+- [x] As the system, I can calculate the monthly payment.
+- [x] As the system, I reject all other pending offers for a car when an offer is accepted.
+----
+- [ ] Log4j operational
+- [ ] 100% test coverage
+- [ ] Data persisted through serialization

@@ -18,7 +18,6 @@ public class Customer extends User<Customer> implements Dao<Customer> {
 
     public Customer(String firstName, String lastName) {
         super(firstName, lastName);
-        this.garage = null;
     }
 
 
@@ -68,6 +67,18 @@ public class Customer extends User<Customer> implements Dao<Customer> {
         return -1;
     }
 
+    public Customer findCustomer(String firstName, String lastName) throws Exception {
+
+        for (int i = 0; i < customers.size(); i++) {
+            Customer customer = customers.get(i);
+            if ((customer.getFirstName().equals(firstName)) && (customer.getLastName().equals(lastName))) {
+                return customer;
+            }
+        }
+
+        throw new IllegalArgumentException("Customer does not exist.");
+    }
+
 
     public void customerMenu(Customer cust) {
         boolean quit = false;
@@ -79,7 +90,7 @@ public class Customer extends User<Customer> implements Dao<Customer> {
 
                 System.out.println("\nChoose from your menu:\n");
                 System.out.println(
-                                "1) View my cars\n" +
+                        "1) View my cars\n" +
                                 "2) Cars on the lot\n" +
                                 "3) Make an offer\n" +
                                 "4) View car payments\n" +

@@ -163,20 +163,14 @@ public class Employee extends User<Employee> implements Dao<Employee> {
 
 
     public boolean acceptOffer() {
-        /*
-        employee accepts offer.
-        employee choose offer to accept via hashmap key.
-        once offer is chosen, set up payment arrangements, and make offers null.
-        Remove other offers.
-         */
+
         System.out.println("What is the VIN of car, to accept offer?");
         int vin = scanner.nextInt();
         for (int i = 0; i < getLot().size(); i++) {
             Car car = getLot().get(i);
 
             if (car.getVin() == vin) {
-                // add 12 payments of offer amount/12 into payment ArrayList
-                pickedOffer(car);
+                pickAcceptedOffer(car);
                 return true;
 
             }
@@ -188,7 +182,7 @@ public class Employee extends User<Employee> implements Dao<Employee> {
     }
 
 
-    private void pickedOffer(Car car) {
+    private void pickAcceptedOffer(Car car) {
         System.out.println("Which offer would you like to choose:");
         car.getOffers().forEach((k, v) -> System.out.println(k + ": " + v));
         //choose offer by typing dollar amount
@@ -205,7 +199,31 @@ public class Employee extends User<Employee> implements Dao<Employee> {
 
 
     public boolean rejectOffer() {
+        System.out.println("What is the VIN of car, to reject offer?");
+        int vin = scanner.nextInt();
+        for (int i = 0; i < getLot().size(); i++) {
+            Car car = getLot().get(i);
+
+            if (car.getVin() == vin) {
+                pickRejectedOffer(car);
+                return true;
+
+            }
+
+        }
+
+        System.out.println("Unable to reject offer.");
         return false;
+    }
+
+
+    private void pickRejectedOffer(Car car) {
+        System.out.println("Choose offer you would like to reject:");
+        car.getOffers().forEach((k, v) -> System.out.println(k + ": " + v));
+
+        BigDecimal offerAmt = scanner.nextBigDecimal();
+        car.getOffers().entrySet().removeIf(entry -> offerAmt.equals(entry.getValue()));
+        System.out.println("Offer rejected successfully.");
     }
 
 

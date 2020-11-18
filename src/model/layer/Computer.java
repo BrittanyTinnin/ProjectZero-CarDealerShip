@@ -15,6 +15,7 @@ public class Computer {
 
 
     private static void car() {
+        System.out.println();
         System.out.println(
                 "                              _.-=\"_-         _\n" +
                         "                         _.-=\"   _-          | ||\"\"\"\"\"\"\"---._______     __..\n" +
@@ -45,6 +46,9 @@ public class Computer {
 
 
         while (!quit) {
+            employee.getUserData();
+            customer.getUserData();
+            customer.retrieveCarData();
             try {
                 System.out.println("\nChoose an option: ");
                 System.out.println(

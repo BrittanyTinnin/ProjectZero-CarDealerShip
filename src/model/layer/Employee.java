@@ -157,7 +157,7 @@ public class Employee extends User<Employee> implements Dao<Employee> {
                 System.out.println(car);
             }
         } catch (IOException | ClassNotFoundException e) {
-            System.out.println("Customers file empty.\n");
+            System.out.println("Car lot file empty.\n");
         }
     }
 
@@ -192,8 +192,22 @@ public class Employee extends User<Employee> implements Dao<Employee> {
         BigDecimal months = new BigDecimal(12);
 
         BigDecimal monthlyPayment = offerAmt.divide(months, BigDecimal.ROUND_CEILING);
+        //employee chooses amount
+        //set car owner to key value of offer amount
+        for(Map.Entry<Customer, BigDecimal> entry: car.getOffers().entrySet()){
+            if(entry.getValue().equals(offerAmt)){
+                car.setOwner(entry.getKey());
+//                entry.getKey().addToGarage(car);
+
+            }
+        }
         car.addToPayments(car, monthlyPayment);
+        System.out.println("car.getOwner: " + car.getOwner());
         car.voidOffers(car);
+        if(car.getOwner() != null){
+            car.getOwner().addToGarage(car.getOwner(), car);
+        }
+
         System.out.println("Payments added to car");
     }
 
@@ -228,6 +242,9 @@ public class Employee extends User<Employee> implements Dao<Employee> {
 
 
     public boolean removeCarByVin() {
+        for(Car car:getLot()){
+            System.out.println(car);
+        }
 
         System.out.println("What is the car vin number:");
         int vin = scanner.nextInt();
@@ -282,7 +299,7 @@ public class Employee extends User<Employee> implements Dao<Employee> {
             ObjectInputStream ois = new ObjectInputStream(new FileInputStream("employees.txt"));
             employees = (List<Employee>) ois.readObject();
             ois.close();
-            System.out.println("Employee file read successfully.\n");
+            System.out.println("\nEmployee file read successfully.");
             for (Employee e : employees) {
                 System.out.println(e);
             }

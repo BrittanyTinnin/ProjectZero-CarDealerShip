@@ -64,10 +64,13 @@ public class Car implements Serializable {
 
 
 
-    public User getOwner(){
+    public Customer getOwner(){
         return owner;
     }
 
+    public void setOwner(Customer owner) {
+        this.owner = owner;
+    }
 
     public HashMap<Customer, BigDecimal> getOffers() {
         return offers;
@@ -95,6 +98,7 @@ public class Car implements Serializable {
                 ", make='" + make + '\'' +
                 ", model='" + model + '\'' +
                 ", color='" + color + '\'' +
+                ", owner=" + owner +
                 ", offers=" + offers +
                 ", payments=" + payments +
                 '}';

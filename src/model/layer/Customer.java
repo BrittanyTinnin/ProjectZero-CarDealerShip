@@ -18,6 +18,7 @@ public class Customer extends User<Customer> implements Dao<Customer> {
 
     public Customer(String firstName, String lastName) {
         super(firstName, lastName);
+        this.garage = garage;
     }
 
 
@@ -38,7 +39,7 @@ public class Customer extends User<Customer> implements Dao<Customer> {
     public Customer login(String firstName, String lastName) {
 
         if (customers.isEmpty() || findByName(firstName, lastName) < 0) {
-            System.out.println("model.layer.User does not exist.");
+            System.out.println("User does not exist.");
             return null;
         }
 
@@ -83,6 +84,7 @@ public class Customer extends User<Customer> implements Dao<Customer> {
     public void customerMenu(Customer cust) {
         boolean quit = false;
 
+
         while (!quit) {
             retrieveCarData();
             try {
@@ -102,7 +104,7 @@ public class Customer extends User<Customer> implements Dao<Customer> {
 
                     case 1:
                         //view my cars
-                        garage(cust.getFirstName(), cust.getLastName());
+                        System.out.println(cust.garage);
                         break;
                     case 2:
                         //view cars on lot
@@ -128,7 +130,7 @@ public class Customer extends User<Customer> implements Dao<Customer> {
                         break;
 
                 }
-                storeCarData();
+
             } catch (InputMismatchException e) {
                 System.out.println("Invalid entry, try again.");
                 scanner.nextLine();
@@ -144,23 +146,27 @@ public class Customer extends User<Customer> implements Dao<Customer> {
         }
     }
 
+    public void addToGarage(Customer customer, Car car){
+//        garage.add(car);
+        System.out.println("Inside addToGarage");
+        System.out.println("Car: " + car);
+        System.out.println("Garage: " + garage);
+        System.out.println("customer: " + customer);
+        customer.garage.add(car);
+        System.out.println("Garage: " + garage);
+        System.out.println("customer2: " + customer);
+        storeUserData(customers);
 
-    public void garage(String firstName, String lastName) {
-        Customer customer = customers.get(findByName(firstName, lastName));
+    }
 
 
-        for (Car car : garage) {
-
-            if (car.getOwner().equals(customer)) {
-                System.out.println(car);
-            }
-
-        }
+    public List<Car> myGarage() {
+        return garage;
     }
 
 
     private boolean makeOffer(Customer customer) {
-
+        viewLot();
 
         System.out.println("Vin # of car to make offer:");
         int vin = scanner.nextInt();
@@ -234,7 +240,7 @@ public class Customer extends User<Customer> implements Dao<Customer> {
             ObjectInputStream ois = new ObjectInputStream(new FileInputStream("customers.txt"));
             customers = (List<Customer>) ois.readObject();
             ois.close();
-            System.out.println("Customer file read successfully.\n");
+            System.out.println("\nCustomer file read successfully.");
             for (Customer c : customers) {
                 System.out.println(c);
             }

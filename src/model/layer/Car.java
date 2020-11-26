@@ -1,5 +1,8 @@
 package model.layer;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -8,6 +11,7 @@ import java.util.List;
 
 public class Car implements Serializable {
 
+    private static Logger logger = LogManager.getLogger();
     private static final long serialVersionUID = 3991040284210077501L;
     private final int vin;
     private final String make;
@@ -32,22 +36,12 @@ public class Car implements Serializable {
 
 
     public void voidOffers(Car car){
-
         car.offers = null;
-
     }
 
-
-    public void allPayments(){
-
-    }
 
 
     public void addToPayments(Car car, BigDecimal amount){
-        System.out.println("Inside car model");
-        System.out.println("car: " + car);
-        System.out.println("car payments: " + car.payments);
-        System.out.println("car payments size: " + car.payments.size());
 
         for(int i=0; i<12; i++){
             car.payments.add(i, amount);
@@ -80,9 +74,9 @@ public class Car implements Serializable {
         System.out.println(offers);
         for(Customer c: offers.keySet()){
             if(c.getLastName().equals(customer.getLastName())){
-                System.out.println("customer making replacement offer: " + c);
                 offers.replace(c, amount);
-                System.out.println("Offer has been replaced.");
+//                System.out.println("Offer has been replaced.");
+                logger.trace("Offer has been replaced.");
                 return;
             }
         }

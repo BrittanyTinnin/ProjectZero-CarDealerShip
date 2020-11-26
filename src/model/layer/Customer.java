@@ -11,14 +11,13 @@ public class Customer extends User<Customer> implements Dao<Customer> {
     private static final long serialVersionUID = 157820544088137620L;
     public static Scanner scanner = new Scanner(System.in);
     static List<Customer> customers = new LinkedList<>();
-    private List<Car> garage = new ArrayList<>();
+//    private List<Car> garage = new ArrayList<>();
 
     public Customer() {
     }
 
     public Customer(String firstName, String lastName) {
         super(firstName, lastName);
-        this.garage = garage;
     }
 
 
@@ -41,9 +40,10 @@ public class Customer extends User<Customer> implements Dao<Customer> {
         if (customers.isEmpty() || findByName(firstName, lastName) < 0) {
             System.out.println("User does not exist.");
             return null;
+        } else {
+            return customers.get(findByName(firstName, lastName));
         }
 
-        return customers.get(findByName(firstName, lastName));
     }
 
     /*
@@ -104,7 +104,7 @@ public class Customer extends User<Customer> implements Dao<Customer> {
 
                     case 1:
                         //view my cars
-                        System.out.println(cust.garage);
+                        myGarage(cust);
                         break;
                     case 2:
                         //view cars on lot
@@ -146,21 +146,45 @@ public class Customer extends User<Customer> implements Dao<Customer> {
         }
     }
 
-    public void addToGarage(Customer customer, Car car){
-//        garage.add(car);
-        System.out.println("Inside addToGarage");
-        System.out.println("Car: " + car);
-        System.out.println("Garage: " + garage);
-        System.out.println("customer: " + customer);
-        customer.garage.add(car);
-        System.out.println("Garage: " + garage);
-        System.out.println("customer2: " + customer);
-        storeUserData(customers);
+//    public void addToGarage(Customer customer, Car car){
+////        garage.add(car);
+//        System.out.println("Inside addToGarage");
+//        System.out.println("Car: " + car);
+//        System.out.println("Garage: " + garage);
+//        System.out.println("customer: " + customer);
+//        customer.garage.add(car);
+//        System.out.println("Garage: " + garage);
+//        System.out.println("customer2: " + customer);
+//        storeUserData(customers);
+//
+//    }
 
-    }
+
+    public List<Car> myGarage(Customer customer) {
+        List<Car> garage = new ArrayList<>();
+        //iterate through the lot of cars
+        //if car owner is the customer parameter
+        //add to customer garage list
+
+        for(int i=0; i<getLot().size(); i++){
+            Car car = getLot().get(i);
+
+            System.out.println("outside if, car.getOwner(): " + car.getOwner());
+            System.out.println("outside if, customer: " + customer);
+            System.out.println("outside if, car:" + car);
+            if(customer == car.getOwner()){
+                System.out.println("inside if, car.getOwner(): " + car.getOwner());
+                System.out.println("inside if, customer: " + customer);
+                System.out.println("inside if, car:" + car);
+                garage.add(car);
+                System.out.println("garage: " + garage);
+                System.out.println("after garage, car.getOwner(): " + car.getOwner());
+                System.out.println("after garage, customer: " + customer);
+                System.out.println("after garage, car:" + car);
+            }
+        }
 
 
-    public List<Car> myGarage() {
         return garage;
     }
 

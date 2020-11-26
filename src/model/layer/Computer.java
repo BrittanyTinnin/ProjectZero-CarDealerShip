@@ -1,10 +1,14 @@
 package model.layer;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class Computer {
     public static Scanner scanner = new Scanner(System.in);
+    private static Logger logger = LogManager.getLogger();
     private static Customer customer = new Customer();
     private static Employee employee = new Employee();
 
@@ -51,6 +55,7 @@ public class Computer {
             customer.retrieveCarData();
             try {
                 System.out.println("\nChoose an option: ");
+                logger.info("Choose an option: ");
                 System.out.println(
                         "Are you a customer or employee?\n" +
                                 "1) Customer\n" +
@@ -62,14 +67,12 @@ public class Computer {
                 switch (x) {
                     case 1:
                         customerAccess();
-
                         break;
                     case 2:
                         employeeAccess();
-
                         break;
                     case 3:
-                        System.out.println("Exiting program now...");
+                        logger.trace("Exiting program now...");
                         quit = true;
                         break;
                     default:
@@ -237,6 +240,10 @@ public class Computer {
 
         for(Customer cust: customer.customers){
             System.out.println(cust);
+        }
+
+        for(Car car: employee.getLot()){
+            System.out.println(car);
         }
     }
 

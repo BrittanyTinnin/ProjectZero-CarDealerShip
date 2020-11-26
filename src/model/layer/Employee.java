@@ -204,9 +204,6 @@ public class Employee extends User<Employee> implements Dao<Employee> {
         car.addToPayments(car, monthlyPayment);
         System.out.println("car.getOwner: " + car.getOwner());
         car.voidOffers(car);
-        if(car.getOwner() != null){
-            car.getOwner().addToGarage(car.getOwner(), car);
-        }
 
         System.out.println("Payments added to car");
     }
@@ -242,6 +239,11 @@ public class Employee extends User<Employee> implements Dao<Employee> {
 
 
     public boolean removeCarByVin() {
+        if(getLot().isEmpty()){
+            System.out.println("No cars on the lot.");
+            return false;
+        }
+
         for(Car car:getLot()){
             System.out.println(car);
         }
@@ -261,7 +263,7 @@ public class Employee extends User<Employee> implements Dao<Employee> {
 
         }
 
-        System.out.println("model.layer.Car does not exist.");
+        System.out.println("Car does not exist.");
         return false;
     }
 

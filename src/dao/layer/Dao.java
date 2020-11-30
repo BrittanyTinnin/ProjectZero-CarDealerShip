@@ -1,8 +1,6 @@
 package dao.layer;
 
 
-import model.layer.User;
-
 import java.util.List;
 
 public interface Dao<T> {

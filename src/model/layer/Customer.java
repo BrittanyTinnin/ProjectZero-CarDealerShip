@@ -6,14 +6,17 @@ import org.apache.logging.log4j.Logger;
 
 import java.io.*;
 import java.math.BigDecimal;
-import java.util.*;
+import java.util.InputMismatchException;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Scanner;
 
 public class Customer extends User<Customer> implements Dao<Customer> {
 
     private static Logger logger = LogManager.getLogger();
     private static final long serialVersionUID = 157820544088137620L;
     public static Scanner scanner = new Scanner(System.in);
-    static List<Customer> customers = new LinkedList<>();
+    static List<Customer> customers = new LinkedList<Customer>();
 
     public Customer() {
     }

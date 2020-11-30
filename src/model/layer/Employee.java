@@ -1,6 +1,8 @@
 package model.layer;
 
 import dao.layer.Dao;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.*;
 import java.math.BigDecimal;
@@ -8,6 +10,7 @@ import java.util.*;
 
 public class Employee extends User<Employee> implements Dao<Employee> {
     private static final long serialVersionUID = 6180622194582426412L;
+    private static Logger logger = LogManager.getLogger();
     public static Scanner scanner = new Scanner(System.in);
     public List<Employee> employees = new LinkedList<>();
 
@@ -36,7 +39,8 @@ public class Employee extends User<Employee> implements Dao<Employee> {
     @Override
     public Employee login(String firstName, String lastName) {
         if (employees.isEmpty() || findByName(firstName, lastName) < 0) {
-            System.out.println("User does not exist.");
+//            System.out.println("User does not exist.");
+            logger.error("User does not exist.");
             return null;
         }
 
@@ -78,8 +82,7 @@ public class Employee extends User<Employee> implements Dao<Employee> {
         while (!quit) {
             retrieveCarData();
             try {
-                System.out.println("\nChoose from your menu:\n");
-                System.out.println(
+                System.out.println("\nChoose from your menu:\n" +
                         "1) Add a car\n" +
                                 "2) Accept car offer\n" +
                                 "3) Reject car offer\n" +

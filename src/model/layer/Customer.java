@@ -1,6 +1,8 @@
 package model.layer;
 
 import dao.layer.Dao;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.*;
 import java.math.BigDecimal;
@@ -8,10 +10,10 @@ import java.util.*;
 
 public class Customer extends User<Customer> implements Dao<Customer> {
 
+    private static Logger logger = LogManager.getLogger();
     private static final long serialVersionUID = 157820544088137620L;
     public static Scanner scanner = new Scanner(System.in);
     static List<Customer> customers = new LinkedList<>();
-//    private List<Car> garage = new ArrayList<>();
 
     public Customer() {
     }
@@ -23,7 +25,6 @@ public class Customer extends User<Customer> implements Dao<Customer> {
 
     @Override
     public boolean register(String firstName, String lastName) {
-
         if (findByName(firstName, lastName) < 0) {
             Customer customer = new Customer(firstName, lastName);
             customers.add(customer);
@@ -36,22 +37,15 @@ public class Customer extends User<Customer> implements Dao<Customer> {
 
     @Override
     public Customer login(String firstName, String lastName) {
-
         if (customers.isEmpty() || findByName(firstName, lastName) < 0) {
-            System.out.println("User does not exist.");
+//            System.out.println("User does not exist.");
+            logger.error("User does not exist.");
             return null;
         } else {
             return customers.get(findByName(firstName, lastName));
         }
 
     }
-
-    /*
-     * As a customer, I can view the cars on the lot.
-     * As a customer, I can make an offer for a car.
-     * As a customer, I can view the cars that I own.
-     * As a customer, I can view my remaining payments for a car.
-     */
 
 
     public int checkIfCustomerExists(Customer customer) {
@@ -90,49 +84,59 @@ public class Customer extends User<Customer> implements Dao<Customer> {
             try {
 
 
-                System.out.println("\nChoose from your menu:\n");
-                System.out.println(
-                        "1) View my cars\n" +
-                                "2) Cars on the lot\n" +
-                                "3) Make an offer\n" +
-                                "4) View car payments\n" +
-                                "5) Quit Menu"
-                );
+//                System.out.println("\nChoose from your menu:\n");
+//                System.out.println(
+//                        "1) View my cars\n" +
+//                                "2) Cars on the lot\n" +
+//                                "3) Make an offer\n" +
+//                                "4) View car payments\n" +
+//                                "5) Quit Menu"
+//                );
+                logger.info("Choose from your menu:\n"+
+//                        "1) View my cars\n" +
+                        "1) Cars on the lot\n" +
+                        "2) Make an offer\n" +
+                        "3) View car payments\n" +
+                        "4) Quit Menu");
                 int choice = scanner.nextInt();
 
                 switch (choice) {
 
+//                    case 1:
+//                        //view my cars
+//                        myGarage(cust);
+//                        break;
                     case 1:
-                        //view my cars
-                        myGarage(cust);
-                        break;
-                    case 2:
                         //view cars on lot
                         viewLot();
                         break;
-                    case 3:
+                    case 2:
                         //make an offer
                         if (makeOffer(cust)) {
-                            System.out.println("Offer added.");
+//                            System.out.println("Offer added.");
+                            logger.trace("Offer added.");
                         } else {
-                            System.out.println("Offer not added.");
+//                            System.out.println("Offer not added.");
+                            logger.trace("Offer not added.");
                         }
                         break;
-                    case 4:
+                    case 3:
                         //view my remaining payments
 //                        carPayments();
                         break;
-                    case 5:
+                    case 4:
                         quit = true;
                         break;
                     default:
-                        System.out.println("Invalid entry, retry.");
+//                        System.out.println("Invalid entry, retry.");
+                        logger.error("Invalid entry, retry.");
                         break;
 
                 }
 
             } catch (InputMismatchException e) {
-                System.out.println("Invalid entry, try again.");
+//                System.out.println("Invalid entry, try again.");
+                logger.error("Invalid entry, retry.");
                 scanner.nextLine();
             }
         }
@@ -146,59 +150,19 @@ public class Customer extends User<Customer> implements Dao<Customer> {
         }
     }
 
-//    public void addToGarage(Customer customer, Car car){
-////        garage.add(car);
-//        System.out.println("Inside addToGarage");
-//        System.out.println("Car: " + car);
-//        System.out.println("Garage: " + garage);
-//        System.out.println("customer: " + customer);
-//        customer.garage.add(car);
-//        System.out.println("Garage: " + garage);
-//        System.out.println("customer2: " + customer);
-//        storeUserData(customers);
-//
-//    }
-
-
-    public List<Car> myGarage(Customer customer) {
-        List<Car> garage = new ArrayList<>();
-        //iterate through the lot of cars
-        //if car owner is the customer parameter
-        //add to customer garage list
-
-        for(int i=0; i<getLot().size(); i++){
-            Car car = getLot().get(i);
-
-            System.out.println("outside if, car.getOwner(): " + car.getOwner());
-            System.out.println("outside if, customer: " + customer);
-            System.out.println("outside if, car:" + car);
-            if(customer == car.getOwner()){
-                System.out.println("inside if, car.getOwner(): " + car.getOwner());
-                System.out.println("inside if, customer: " + customer);
-                System.out.println("inside if, car:" + car);
-                garage.add(car);
-                System.out.println("garage: " + garage);
-                System.out.println("after garage, car.getOwner(): " + car.getOwner());
-                System.out.println("after garage, customer: " + customer);
-                System.out.println("after garage, car:" + car);
-            }
-        }
-
-
-        return garage;
-    }
 
 
     private boolean makeOffer(Customer customer) {
         viewLot();
 
-        System.out.println("Vin # of car to make offer:");
+//        System.out.println("Vin # of car to make offer:");
+        logger.info("Vin # of car to make offer:");
         int vin = scanner.nextInt();
-        System.out.println("Offer Amount:");
+//        System.out.println("Offer Amount:");
+        logger.info("Offer Amount:");
         BigDecimal amount = scanner.nextBigDecimal();
 
         Offer offer = new Offer(amount, customer);
-
 
         for (int i = 0; i < getLot().size(); i++) {
             if (getLot().get(i).getVin() == vin) {
@@ -213,28 +177,6 @@ public class Customer extends User<Customer> implements Dao<Customer> {
     }
 
 
-//    public boolean addOffer(double amount, int carId, Customer customer){
-//        System.out.println("amount: " + amount);
-//        System.out.println("carId: " + carId);
-//        System.out.println("customer: " + customer);
-//
-//        List<Car> carlist = customer.getLot();
-//
-//        System.out.println("outside for loop");
-//        for(int i=0; i<carlist.size(); i++) {
-//            System.out.println("inside for loop");
-//            System.out.println("iteration vin: " + carlist.get(i).getVin());
-//            if(carlist.get(i).getVin() == carId){
-//                //System.out.println("iteration vin: " + carlist.get(i).getVin());
-//                carlist.get(i).offers.put(customer, amount);
-//                return true;
-//            }
-//        }
-//
-//
-//        return false;
-//    }
-
 
     public void retrieveCarData() {
         try {
@@ -242,7 +184,8 @@ public class Customer extends User<Customer> implements Dao<Customer> {
             setLot((List<Car>) ois.readObject());
             ois.close();
         } catch (IOException | ClassNotFoundException e) {
-            System.out.println("Car lot file empty.\n");
+//            System.out.println("Car lot file empty.\n");
+            logger.error("Car lot file empty.");
         }
     }
 
@@ -264,12 +207,14 @@ public class Customer extends User<Customer> implements Dao<Customer> {
             ObjectInputStream ois = new ObjectInputStream(new FileInputStream("customers.txt"));
             customers = (List<Customer>) ois.readObject();
             ois.close();
-            System.out.println("\nCustomer file read successfully.");
+//            System.out.println("\nCustomer file read successfully.");
+            logger.trace("Customer file read successfully.");
             for (Customer c : customers) {
                 System.out.println(c);
             }
         } catch (IOException | ClassNotFoundException e) {
-            System.out.println("Customers file empty.\n");
+//            System.out.println("Customers file empty.\n");
+            logger.error("Customers file empty.");
         }
 
     }
@@ -280,7 +225,8 @@ public class Customer extends User<Customer> implements Dao<Customer> {
             ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("customers.txt"));
             oos.writeObject(users);
             oos.close();
-            System.out.println("Customer file updated.\n");
+//            System.out.println("Customer file updated.\n");
+            logger.trace("Customer file updated.");
             return true;
         } catch (IOException e) {
             e.printStackTrace();

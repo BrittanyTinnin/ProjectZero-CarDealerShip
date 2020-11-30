@@ -118,24 +118,29 @@ public class Employee extends User<Employee> implements Dao<Employee> {
                         quit = true;
                         break;
                     default:
-                        System.out.println("Invalid entry, retry.");
+//                        System.out.println("Invalid entry, retry.");
+                        logger.error("Invalid entry, retry.");
                         break;
 
                 }
                 storeCarData();
             } catch (InputMismatchException e) {
-                System.out.println("Invalid entry, try again.\n");
+//                System.out.println("Invalid entry, try again.\n");
+                logger.error("Invalid entry, retry.");
                 scanner.nextLine();
             }
         }
     }
 
     public void addCar() {
-        System.out.println("Car Make:");
+//        System.out.println("Car Make:");
+        logger.info("Car Make:");
         String make = scanner.next();
-        System.out.println("Car Model:");
+//        System.out.println("Car Model:");
+        logger.info("Car Model:");
         String model = scanner.next();
-        System.out.println("Car Color:");
+//        System.out.println("Car Color:");
+        logger.info("Car Color:");
         String color = scanner.next();
 
         Random rand = new Random();
@@ -160,14 +165,16 @@ public class Employee extends User<Employee> implements Dao<Employee> {
                 System.out.println(car);
             }
         } catch (IOException | ClassNotFoundException e) {
-            System.out.println("Car lot file empty.\n");
+//            System.out.println("Car lot file empty.\n");
+            logger.error("Car lot file empty.");
         }
     }
 
 
     public boolean acceptOffer() {
 
-        System.out.println("What is the VIN of car, to accept offer?");
+//        System.out.println("What is the VIN of car, to accept offer?");
+        logger.info("What is the VIN of car, to accept offer?");
         int vin = scanner.nextInt();
         for (int i = 0; i < getLot().size(); i++) {
             Car car = getLot().get(i);
@@ -186,34 +193,29 @@ public class Employee extends User<Employee> implements Dao<Employee> {
 
 
     private void pickAcceptedOffer(Car car) {
-        System.out.println("Which offer would you like to choose:");
+//        System.out.println("Which offer would you like to choose:");
+        logger.info("Which offer would you like to choose:");
         car.getOffers().forEach((k, v) -> System.out.println(k + ": " + v));
-        //choose offer by typing dollar amount
-        //take that dollar amount and divide by 12 months
-        //add each payment into the payment ArrayList
         BigDecimal offerAmt = scanner.nextBigDecimal();
         BigDecimal months = new BigDecimal(12);
 
         BigDecimal monthlyPayment = offerAmt.divide(months, BigDecimal.ROUND_CEILING);
-        //employee chooses amount
-        //set car owner to key value of offer amount
         for(Map.Entry<Customer, BigDecimal> entry: car.getOffers().entrySet()){
             if(entry.getValue().equals(offerAmt)){
                 car.setOwner(entry.getKey());
-//                entry.getKey().addToGarage(car);
-
             }
         }
         car.addToPayments(car, monthlyPayment);
-        System.out.println("car.getOwner: " + car.getOwner());
         car.voidOffers(car);
 
-        System.out.println("Payments added to car");
+//        System.out.println("Payments added to car");
+        logger.trace("Payments added to car");
     }
 
 
     public boolean rejectOffer() {
-        System.out.println("What is the VIN of car, to reject offer?");
+//        System.out.println("What is the VIN of car, to reject offer?");
+        logger.info("What is the VIN of car, to reject offer?");
         int vin = scanner.nextInt();
         for (int i = 0; i < getLot().size(); i++) {
             Car car = getLot().get(i);
@@ -226,24 +228,28 @@ public class Employee extends User<Employee> implements Dao<Employee> {
 
         }
 
-        System.out.println("Unable to reject offer.");
+//        System.out.println("Unable to reject offer.");
+        logger.error("Unable to reject offer.");
         return false;
     }
 
 
     private void pickRejectedOffer(Car car) {
-        System.out.println("Choose offer you would like to reject:");
+//        System.out.println("Choose offer you would like to reject:");
+        logger.info("Choose offer you would like to reject:");
         car.getOffers().forEach((k, v) -> System.out.println(k + ": " + v));
 
         BigDecimal offerAmt = scanner.nextBigDecimal();
         car.getOffers().entrySet().removeIf(entry -> offerAmt.equals(entry.getValue()));
-        System.out.println("Offer rejected successfully.");
+//        System.out.println("Offer rejected successfully.");
+        logger.trace("Offer rejected successfully.");
     }
 
 
     public boolean removeCarByVin() {
         if(getLot().isEmpty()){
-            System.out.println("No cars on the lot.");
+//            System.out.println("No cars on the lot.");
+            logger.info("No cars on the lot.");
             return false;
         }
 
@@ -251,7 +257,8 @@ public class Employee extends User<Employee> implements Dao<Employee> {
             System.out.println(car);
         }
 
-        System.out.println("What is the car vin number:");
+//        System.out.println("What is the car vin number:");
+        logger.info("What is the car vin number:");
         int vin = scanner.nextInt();
 
         for (int i = 0; i < getLot().size(); i++) {
@@ -260,13 +267,15 @@ public class Employee extends User<Employee> implements Dao<Employee> {
 
             if (car.getVin() > 0) {
                 getLot().remove(car);
-                System.out.println("Car with vin " + car.getVin() + " was removed.");
+//                System.out.println("Car with vin " + car.getVin() + " was removed.");
+                logger.trace("Car with vin " + car.getVin() + " was removed.");
                 return true;
             }
 
         }
 
-        System.out.println("Car does not exist.");
+//        System.out.println("Car does not exist.");
+        logger.error("Car does not exist.");
         return false;
     }
 
@@ -282,7 +291,8 @@ public class Employee extends User<Employee> implements Dao<Employee> {
             setLot((List<Car>) ois.readObject());
             ois.close();
         } catch (IOException | ClassNotFoundException e) {
-            System.out.println("Car lot file empty.\n");
+//            System.out.println("Car lot file empty.\n");
+            logger.error("Car lot file empty.");
         }
     }
 
@@ -305,12 +315,14 @@ public class Employee extends User<Employee> implements Dao<Employee> {
             employees = (List<Employee>) ois.readObject();
             ois.close();
             System.out.println("\nEmployee file read successfully.");
+            logger.trace("Employee file read successfully.");
             for (Employee e : employees) {
                 System.out.println(e);
             }
 
         } catch (IOException | ClassNotFoundException e) {
-            System.out.println("Employees file empty.\n");
+//            System.out.println("Employees file empty.\n");
+            logger.error("Employees file empty.");
         }
     }
 
@@ -322,7 +334,8 @@ public class Employee extends User<Employee> implements Dao<Employee> {
             ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("employees.txt"));
             oos.writeObject(users);
             oos.close();
-            System.out.println("Employee file updated.\n");
+//            System.out.println("Employee file updated.\n");
+            logger.trace("Employee file updated.");
             return true;
         } catch (IOException e) {
             e.printStackTrace();
